@@ -1,0 +1,22 @@
+{
+  "name": "bun_smart_table",
+  "module": "broker.ts",
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "start": "bun run ./build/mqtt-broker.js",
+    "build": "bun build ./src/mqtt-broker.ts --minify --target=node --outfile=bundle.js --outdir=build",
+    "dev": "bun run --watch ./src/mqtt-broker.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/figlet": "^1.7.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "aedes": "^0.51.3",
+    "figlet": "^1.8.0"
+  }
+}
