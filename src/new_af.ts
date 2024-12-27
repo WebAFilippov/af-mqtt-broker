@@ -200,6 +200,7 @@ class AudioDeviceMonitor {
 
     // this.exePath = path.join(app.getAppPath(), 'resources', 'af-win-audio.exe').replace('app.asar', 'app.asar.unpacked')
 
+
     // Запуск процесса
     this.audioDeviceProcess = spawn(this.exePath, [this.delay.toString(), this.step.toString()])
     this.printMessage('alert', `Процесс запущен`)

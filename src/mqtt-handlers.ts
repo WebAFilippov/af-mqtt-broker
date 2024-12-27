@@ -1,4 +1,4 @@
-import { escape } from "node:querystring";
+
 import { aedes, AudioMonitor } from "./mqtt-broker";
 import { IDevice } from "./new_af";
 
@@ -10,7 +10,7 @@ let newDefaultValue: IDevice = { id: "", name: "", volume: 0, muted: false }
 
 export const handlerMQTT = () => {
   AudioMonitor.on('change', (deviceInfo, change) => {
-    console.log(deviceInfo)
+    // console.log(deviceInfo)
     newDefaultValue = deviceInfo
     if (change.id) {
       console.log(deviceInfo.id)
@@ -62,7 +62,7 @@ export const handlerMQTT = () => {
       } else if (topic === 'decrement/volume') {
         sendToProcessDecrementVolume()
       } else if (topic === 'toggle/volume') {
-        AudioMonitor.toggleMute()
+        sendToProcessToggleVolume()
       }
     }
   });
@@ -77,6 +77,10 @@ const sendToProcessDecrementVolume = () => {
   AudioMonitor.decrementVolume()
 }
 
+const sendToProcessToggleVolume = () => {
+  AudioMonitor.toggleMute()
+}
+
 const sendToClientsIncrementVolume = (defaultValue: IDevice) => {
   console.log('inc ', defaultValue.volume)
 }
@@ -84,4 +88,3 @@ const sendToClientsIncrementVolume = (defaultValue: IDevice) => {
 const sendToClientsDecrementVolume = (defaultValue: IDevice) => {
   console.log('dec ', defaultValue.volume)
 }
-
