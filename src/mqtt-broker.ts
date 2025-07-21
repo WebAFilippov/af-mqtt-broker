@@ -9,7 +9,7 @@ const PORT = 1883;
 const options: AudioMonitorOptions = {
   delay: 100,
   step: 5,
-  autoStart: false,
+  autoStart: true,
   logger: false
 }
 export const AudioMonitor = new AudioDeviceMonitor(

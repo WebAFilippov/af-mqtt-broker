@@ -1,4 +1,3 @@
-
 import { aedes, AudioMonitor } from "./mqtt-broker";
 import { IDevice } from "./new_af";
 
@@ -21,9 +20,11 @@ export const handlerMQTT = () => {
     if (change.volume) {
       if (newDefaultValue.volume > deviceValue.volume) {
         sendToClientsIncrementVolume(newDefaultValue)
+        // sendToProcessIncrementVolume()
       }
       if (newDefaultValue.volume < deviceValue.volume) {
         sendToClientsDecrementVolume(newDefaultValue)
+        // sendToProcessDecrementVolume()
       }
     }
     if (change.muted) {
@@ -62,6 +63,7 @@ export const handlerMQTT = () => {
       } else if (topic === 'decrement/volume') {
         sendToProcessDecrementVolume()
       } else if (topic === 'toggle/volume') {
+        sendToProcessDecrementVolume
         sendToProcessToggleVolume()
       }
     }
@@ -70,11 +72,37 @@ export const handlerMQTT = () => {
 
 
 const sendToProcessIncrementVolume = () => {
-  AudioMonitor.incrementVolume()
-}
+  AudioMonitor.incrementVolume();
+  aedes.publish(
+    {
+      cmd: 'publish', // Команда публикации
+      topic: 'response/increment/volume', // Топик публикации
+      payload: Buffer.from('+ from backend'), // Сообщение должно быть в формате Buffer
+      qos: 0, // Уровень качества обслуживания
+      retain: false, // Флаг сохранения сообщения
+      dup: false // Дублирование сообщения
+    },
+    (error) => {
+      if (error) console.error('Ошибка публикации:', error);
+    }
+  );
+};
 
 const sendToProcessDecrementVolume = () => {
   AudioMonitor.decrementVolume()
+  aedes.publish(
+    {
+      cmd: 'publish', // Команда публикации
+      topic: 'response/increment/decrement', // Топик публикации
+      payload: Buffer.from('- from backend'), // Сообщение должно быть в формате Buffer
+      qos: 0, // Уровень качества обслуживания
+      retain: false, // Флаг сохранения сообщения
+      dup: false // Дублирование сообщения
+    },
+    (error) => {
+      if (error) console.error('Ошибка публикации:', error);
+    }
+  );
 }
 
 const sendToProcessToggleVolume = () => {
